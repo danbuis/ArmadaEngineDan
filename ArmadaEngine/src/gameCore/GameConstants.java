@@ -27,6 +27,8 @@ public class GameConstants {
 	public static final double shipLargeWidth = 76;
 	public static final double shipLargeLength = 129;
 	
+	public static final double shipBaseRails = 2;
+	
 	public static enum DiceResult {
 		BLANK, ACCURACY, HIT, CRIT, HITHIT, HITCRIT
 	};
