@@ -2,29 +2,30 @@ package shipCore;
 import geometry.*;
 //import gameCore.GameConstants;
 /*
- * A hull zone has several attributes known to it. It knows:
+ * A hull zone has several attributes that the its parent ship will look up.
  * 1) Its shield count
- * 2) The ship its on
- * 3) its firing arc origin's offset relative to ship center
- * 4) its line of sight offset relative to ship center
- * 5) Its arc lines relative to the ship's facing
- * 6) Its dice pool
+ * 2) Its dice pool
+ * 3) Its geometry
  */
 
-public class HullZone {
+public class HullZone extends Polygon{
 	//fields
-	protected int shields = 0;
-	protected ShipBase sb = null;
-	protected PolarCoord firingArcOffset = null;
-	protected double firingArcLeftBound = 0;
-	protected double firingArcRightBound = 0;
+	private int maxShields = 0;
+	private int currentShields = 0;
+	//dice are in the order of red, blue, black
+	private int[] dicePool = {0,0,0};
+	Polygon geometry;
 	
-	public HullZone (int shields, ShipBase sb, PolarCoord firingArcOffset, double firingArcLeftBound, double firingArcRightBound){
-		this.shields = shields;
-		this.sb = sb;
-		this.firingArcOffset = firingArcOffset;
-		this.firingArcLeftBound = firingArcLeftBound;
-		this.firingArcRightBound = firingArcRightBound;
+	public HullZone (Polygon geometry, int redDice, int blueDice, int blackDice, int shields){
+		
+		maxShields = shields;
+		currentShields=shields;
+		
+		dicePool[0]=redDice;
+		dicePool[1]=blueDice;
+		dicePool[2]=blackDice;
+		
 	}
 	
 }
+
