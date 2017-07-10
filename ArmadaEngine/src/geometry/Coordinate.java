@@ -48,6 +48,10 @@ public class Coordinate {
 	//returns the angle in radians of from this point to another point. Will return between 0 and 2PI
 	public double getAngle(Coordinate other){
 		double temp = getDiffY(other)/getDiffX(other);
+		
+		if(Double.isNaN(temp)){
+			return 0;
+		}
 		temp = Math.atan(temp);
 		//adjusters based on coordinates, since aTan tradition returns between -pi/2 and +pi/2. 
 		//Adding pi when X<0 will clear the overlap, and adding 2Pi to when x>0 but y<0 will push the rest above 0;

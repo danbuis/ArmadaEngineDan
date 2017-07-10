@@ -1,7 +1,3 @@
-/gameCore/
-/geometry/
-/shipCore/
-/startHere/
-/ships/
-/Tests/
 /ShipTests/
+/ships/
+/geometry/
