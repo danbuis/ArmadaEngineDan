@@ -14,11 +14,17 @@ public class PolarCoord {
 		angle = a;
 		distance = d;
 	}
-	//Converts a polar coordinate into a regular one
+	//Converts a polar coordinate into a regular one based on a specific non-zero origin
 	public Coordinate toCoordinate(Coordinate other){
 		double tempX =Math.cos(angle)*distance;
+		System.out.println(tempX);
 		double tempY= Math.sin(angle)*distance;
+		System.out.println(tempY);
 		return new Coordinate(tempX+other.getXPos(), tempY+other.getYPos());
+	}
+	
+	public Coordinate toCoordinate(){
+		return toCoordinate(new Coordinate(0,0));
 	}
 	
 	

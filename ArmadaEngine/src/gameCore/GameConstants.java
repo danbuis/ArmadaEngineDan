@@ -32,5 +32,15 @@ public class GameConstants {
 	public static enum DiceResult {
 		BLANK, ACCURACY, HIT, CRIT, HITHIT, HITCRIT
 	};
+	
+	public static enum ShipVarients {
+		NebulonB_Support,
+		NebulonB_Escort,
+		CR90A,
+		CR90B,
+		Victory1,
+		Vitory2
+		};
+	
 
 }

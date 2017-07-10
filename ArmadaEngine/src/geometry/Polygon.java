@@ -12,7 +12,6 @@ public class Polygon extends ShapeBase{
 	
 	//null constructor
 	public Polygon(){
-		System.out.println("null shape. please fix");
 	}
 	//valued constructor
 	public Polygon(Coordinate[] coords){

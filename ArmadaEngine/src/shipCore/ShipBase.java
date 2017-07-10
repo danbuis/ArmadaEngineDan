@@ -7,7 +7,7 @@ import geometry.*;
 public class ShipBase{
 	
 
-	private Polygon plasticBase = null;
+	public Polygon plasticBase = null;
 	private double heading = 0;
 	
 	/**
@@ -16,35 +16,39 @@ public class ShipBase{
 	 * [2] rear zone
 	 * [3] left zone
 	 */
-	private HullZone[] hullZones = new HullZone[4];
+	public HullZone[] hullZones = new HullZone[4];
 	
-	private int frontRedDice;
-	private int frontBlueDice;
-	private int frontBlackDice;
+	protected int frontRedDice;
+	protected int frontBlueDice;
+	protected int frontBlackDice;
 	
-	private int rightRedDice;
-	private int rightBlueDice;
-	private int rightBlackDice;
+	protected int rightRedDice;
+	protected int rightBlueDice;
+	protected int rightBlackDice;
 	
-	private int backRedDice;
-	private int backBlueDice;
-	private int backBlackDice;
+	protected int backRedDice;
+	protected int backBlueDice;
+	protected int backBlackDice;
 	
-	private int leftRedDice;
-	private int leftBlueDice;
-	private int leftBlackDice;
+	protected int leftRedDice;
+	protected int leftBlueDice;
+	protected int leftBlackDice;
 	
-	private int frontShieldsMax;
-	private int rightShieldsMax;
-	private int rearShieldsMax;
-	private int leftShieldsMax;
+	public int antiSquadRedDice;
+	public int antiSquadBlueDice;
+	public int antiSquadBlackDice;
 	
-	private int commandValue;
-	private int squadronValue;
-	private int engineeringValue;
+	protected int frontShieldsMax;
+	protected int rightShieldsMax;
+	protected int backShieldsMax;
+	protected int leftShieldsMax;
 	
-	private double baseLength=0;
-	private double baseWidth=0;
+	public int commandValue;
+	public int squadronValue;
+	public int engineeringValue;
+	
+	protected double baseLength=0;
+	protected double baseWidth=0;
 	
 	
 	
@@ -68,10 +72,10 @@ public class ShipBase{
 		}
 		
 		Coordinate[] shipCoords = new Coordinate[4];
-		shipCoords[0] = new Coordinate(baseLength/2,baseWidth/2 + GameConstants.shipBaseRails);
-		shipCoords[1] = new Coordinate(-baseLength/2,baseWidth/2 + GameConstants.shipBaseRails);
-		shipCoords[2] = new Coordinate(-baseLength/2,-baseWidth/2 - GameConstants.shipBaseRails);
-		shipCoords[3] = new Coordinate(baseLength/2,-baseWidth/2 - GameConstants.shipBaseRails);
+		shipCoords[0] = new Coordinate(baseWidth/2 + GameConstants.shipBaseRails , baseLength/2);
+		shipCoords[1] = new Coordinate(-baseWidth/2 - GameConstants.shipBaseRails,baseLength/2);
+		shipCoords[2] = new Coordinate(-baseWidth/2 - GameConstants.shipBaseRails,-baseLength/2);
+		shipCoords[3] = new Coordinate(baseWidth/2 + GameConstants.shipBaseRails,-baseLength/2);
 		plasticBase = new Polygon(shipCoords);
 	}
 	
@@ -88,6 +92,9 @@ public class ShipBase{
 	public void rotate(double r){
 		heading+=r;
 		plasticBase.rotate(r);
+		for(HullZone hullZone : hullZones){
+			hullZone.getGeometry().rotate(r);
+		}
 	}
 	public double getFacing() {
 		return heading;
@@ -111,46 +118,45 @@ public class ShipBase{
 	 * 
 	 * @param frontOffset - how far back along the side edge for the firing arc line
 	 * @param rearOffset - how far forward along the side edge for the firing arc line
-	 * @param frontConjunction - how far along the central axis for the lines to meet
-	 * @param rearConjuntion - how far along the central axis for the lines to meet
+	 * @param frontConjunction - how far from edge along the central axis for the lines to meet
+	 * @param rearConjuntion - how far from edge along the central axis for the lines to meet
 	 */
 	public Polygon[] generateHullZonesPolygons( double frontOffset, double rearOffset, double frontConjunction, double rearConjunction){
-		Polygon[] returnPolys = new Polygon[4];
+	
 		
 		//generate front polygon
 		Coordinate[] coordsFront = new Coordinate[5];
-		coordsFront[0] = new Coordinate(baseLength/2,-baseWidth/2); //front left
-		coordsFront[1] = new Coordinate(baseLength/2,baseWidth/2); //front right
-		coordsFront[2] = new Coordinate(baseLength/2-frontOffset, baseWidth/2); //right middle front
-		coordsFront[3] = new Coordinate(baseLength/2-frontConjunction, 0); // front conjunction
-		coordsFront[4] = new Coordinate(baseLength/2-frontOffset, -baseWidth/2); //left middle front
-		returnPolys[0] = new Polygon(coordsFront); //generate new polygon
+		coordsFront[0] = new Coordinate(-baseWidth/2,baseLength/2); //front left
+		coordsFront[1] = new Coordinate(baseWidth/2,baseLength/2); //front right
+		coordsFront[2] = new Coordinate(baseWidth/2, baseLength/2-frontOffset); //right middle front
+		coordsFront[3] = new Coordinate(0, baseLength/2-frontConjunction); // front conjunction
+		coordsFront[4] = new Coordinate(-baseWidth/2, baseLength/2-frontOffset); //left middle front
 		
 		//generate right polygon
 		Coordinate []coordsRight = new Coordinate[4];
 		coordsRight[0] = coordsFront[2]; //right middle front
-		coordsRight[1] = new Coordinate(-baseLength/2+rearOffset, baseWidth/2); //right middle rear
-		coordsRight[2] = new Coordinate(-baseLength/2+rearConjunction, 0); //rear conjunction
+		coordsRight[1] = new Coordinate(baseWidth/2, -baseLength/2+rearOffset); //right middle rear
+		coordsRight[2] = new Coordinate(0, -baseLength/2+rearConjunction); //rear conjunction
 		coordsRight[3] = coordsFront[3]; //front conjunction
-		returnPolys[1] = new Polygon(coordsRight); //generate new polygon
 		
 		//generate rear polygon
 		Coordinate[]coordsRear = new Coordinate[5];
-		coordsRear[0] = new Coordinate(-baseLength/2, baseWidth/2); //rear right
-		coordsRear[1] = new Coordinate(-baseLength/2, -baseWidth/2); //rear left
-		coordsRear[2] = new Coordinate(-baseLength/2+rearOffset, -baseWidth/2); //left middle rear
+		coordsRear[0] = new Coordinate(baseWidth/2, -baseLength/2); //rear right
+		coordsRear[1] = new Coordinate(-baseWidth/2, -baseLength/2); //rear left
+		coordsRear[2] = new Coordinate(-baseWidth/2, -baseLength/2+rearOffset); //left middle rear
 		coordsRear[3] = coordsRight[2]; //rear conjunction
 		coordsRear[4] = coordsRight[1]; //right middle rear
-		returnPolys[2] = new Polygon(coordsRear); //generate new polygon
+
 		
 		//generate left polygon
 		Coordinate[]coordsLeft = new Coordinate[4];
 		coordsLeft[0] = coordsRear[2]; //left middle rear
 		coordsLeft[1] = coordsFront[4];//left middle front
-		coordsLeft[3] = coordsFront[3];//front conjunction
-		coordsLeft[4] = coordsRight[2];//rear conjunction
-		returnPolys[3] = new Polygon(coordsLeft);
+		coordsLeft[2] = coordsFront[3];//front conjunction
+		coordsLeft[3] = coordsRight[2];//rear conjunction
+
 		
+		Polygon[] returnPolys = {new Polygon(coordsFront),new Polygon(coordsRight),new Polygon(coordsRear),new Polygon(coordsLeft)};
 		
 		return returnPolys;
 	}
